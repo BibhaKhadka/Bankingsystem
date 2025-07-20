@@ -16,7 +16,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git branch: 'main', url: 'https://github.com/BibhaKhadka/Bankingsystem.git'
+        git branch: 'master', url: 'https://github.com/BibhaKhadka/Bankingsystem.git'
       }
     }
 
@@ -40,10 +40,9 @@ pipeline {
     stage('Backend: Install Dependencies') {
       steps {
         dir("${BACKEND_DIR}") {
-          // Ensure pip is available and virtualenv if needed
-          sh '''
-            python3 -m venv venv
-            . venv/bin/activate
+          bat '''
+            python -m venv venv
+            call venv\\Scripts\\activate
             pip install -r requirements.txt
           '''
         }
@@ -53,11 +52,10 @@ pipeline {
     stage('Backend: Run Tests or Start') {
       steps {
         dir("${BACKEND_DIR}") {
-          // Run tests or simulate server start (e.g., Flask or FastAPI)
-          sh '''
-            . venv/bin/activate
-            echo "Backend is ready"
-            # Optional: python app.py or uvicorn main:app
+          bat '''
+            call venv\\Scripts\\activate
+            echo Backend is ready
+            REM Optional: python app.py or uvicorn main:app
           '''
         }
       }
