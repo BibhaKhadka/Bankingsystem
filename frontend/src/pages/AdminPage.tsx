@@ -4,7 +4,7 @@ import { User, Account } from "../types";
 import { userAPI, accountsAPI } from "../services/api";
 import Spinner from "../components/ui/Spinner";
 import AlertMessage from "../components/ui/AlertMessage";
-//import { formatCurrency, formatDate } from "../utils/formatters";
+import { formatCurrency, formatDate } from "../utils/formatters";
 import { Link, Navigate } from "react-router-dom";
 
 const AdminPage: React.FC = () => {

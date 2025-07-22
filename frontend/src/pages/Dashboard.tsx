@@ -12,9 +12,9 @@ import {
   Legend,
   ArcElement,
   ChartOptions,
-  //ChartData,
-  //ChartType,
-  //Chart,
+  ChartData,
+  ChartType,
+  Chart,
 } from 'chart.js';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import {
