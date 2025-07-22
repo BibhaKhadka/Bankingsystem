@@ -22,7 +22,7 @@ import InvestmentsPage from "./pages/InvestmentsPage";
 import BudgetPage from "./pages/BudgetPage";
 import SupportPage from "./pages/SupportPage";
 import SettingsPage from "./pages/SettingsPage";
-import AdminPage from "./pages/AdminPage";
+//import AdminPage from "./pages/AdminPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 const App: React.FC = () => {
