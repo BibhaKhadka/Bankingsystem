@@ -56,20 +56,23 @@ pipeline {
     stage('Backend: Run Tests') {
       steps {
         dir("${BACKEND_DIR}") {
-          // If you have Jest or Mocha configured for tests
           bat 'npm test'
         }
       }
     }
 
-    // Optional: only if you want to keep the app running on Jenkins (usually not done)
-    // stage('Backend: Run App') {
-    //   steps {
-    //     dir("${BACKEND_DIR}") {
-    //       bat 'npm start'
-    //     }
-    //   }
-    // }
+    stage('Backend: Run App') {
+      steps {
+        dir("${BACKEND_DIR}") {
+          bat '''
+          REM Activate environment if needed (optional)
+          REM call venv\\Scripts\\activate.bat
+          REM Run backend app here if needed
+          REM node dist/server.js
+          '''
+        }
+      }
+    }
   }
 
   post {
