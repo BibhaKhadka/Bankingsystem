@@ -5,10 +5,7 @@ pipeline {
     NODE_VERSION = '18.x'
     BACKEND_DIR = 'backend'
     FRONTEND_DIR = 'frontend'
-    PYTHON_VERSION = '3.10' // Not used directly here but good to keep
-
-    // Add Python and pip to the PATH explicitly for Jenkins
-    PATH = "C:\\Users\\Bibhooo\\AppData\\Local\\Programs\\Python\\Python313\\;C:\\Users\\Bibhooo\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\;${env.PATH}"
+    PYTHON_VERSION = '3.10' // Just a note, not used directly here
   }
 
   tools {
@@ -56,13 +53,22 @@ pipeline {
       }
     }
 
-    stage('Backend: Run Tests or Start') {
+    stage('Backend: Run Tests') {
       steps {
         dir("${BACKEND_DIR}") {
           bat '''
           call venv\\Scripts\\activate.bat
-          echo Backend is ready
-          REM Uncomment the next line to start your app
+          python -m unittest discover
+          '''
+        }
+      }
+    }
+
+    stage('Backend: Run App') {
+      steps {
+        dir("${BACKEND_DIR}") {
+          bat '''
+          call venv\\Scripts\\activate.bat
           REM python app.py
           '''
         }
@@ -72,10 +78,10 @@ pipeline {
 
   post {
     success {
-      echo 'Build and backend integration succeeded.'
+      echo 'Build, test, and backend integration succeeded!'
     }
     failure {
-      echo 'Build or backend integration failed.'
+      echo 'Build, test, or backend integration failed.'
     }
   }
 }
