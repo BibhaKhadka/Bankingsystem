@@ -6,6 +6,9 @@ pipeline {
     BACKEND_DIR = 'backend'
     FRONTEND_DIR = 'frontend'
     PYTHON_VERSION = '3.10' // Not used directly here but good to keep
+
+    // Add Python and pip to the PATH explicitly for Jenkins
+    PATH = "C:\\Users\\Bibhooo\\AppData\\Local\\Programs\\Python\\Python313\\;C:\\Users\\Bibhooo\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\;${env.PATH}"
   }
 
   tools {
@@ -69,7 +72,7 @@ pipeline {
 
   post {
     success {
-      echo 'Build and backend integration succeeded!'
+      echo 'Build and backend integration succeeded.'
     }
     failure {
       echo 'Build or backend integration failed.'
