@@ -30,7 +30,7 @@ pipeline {
     stage('Frontend: Build') {
       steps {
         dir("${FRONTEND_DIR}") {
-          bat 'npm run build'
+          bat 'set CI=false && npm run build'
         }
       }
     }
@@ -38,9 +38,9 @@ pipeline {
     stage('Backend: Install Dependencies') {
       steps {
         dir("${BACKEND_DIR}") {
-          // Create venv only if it doesn't exist, install dependencies
+          // Create venv only if it doesn't exist, then activate and install dependencies
           bat '''
-          if not exist venv (
+          if not exist venv\\Scripts\\activate.bat (
             python -m venv venv
           )
           call venv\\Scripts\\activate.bat
