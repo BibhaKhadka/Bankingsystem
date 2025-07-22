@@ -75,19 +75,23 @@ pipeline {
       steps {
         echo 'Deploying backend to staging...'
         dir("${BACKEND_DIR}") {
-          bat 'npm run start:staging' // Start backend in staging mode
+          bat 'start "" cmd /c "npm run start:staging"' // Run backend in background
         }
         echo 'Serving frontend staging build...'
         dir("${FRONTEND_DIR}") {
-          bat 'npm run serve:staging'  // Serve frontend staging build
+          bat 'start "" cmd /c "npm run serve:staging"' // Run frontend in background
         }
+        // Optional wait
+        bat 'timeout /t 10'
       }
     }
 
     stage('Final Build') {
       steps {
         echo 'Running final production build...'
-        // Add any final production build steps here
+        dir("${FRONTEND_DIR}") {
+          bat 'npm run build:prod'
+        }
       }
     }
   }
