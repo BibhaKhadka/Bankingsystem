@@ -5,7 +5,7 @@ pipeline {
     NODE_VERSION = '18.x'
     BACKEND_DIR = 'backend'
     FRONTEND_DIR = 'frontend'
-    PYTHON_VERSION = '3.10'
+    PYTHON_VERSION = '3.10' // Not used directly here but good to keep
   }
 
   tools {
@@ -38,9 +38,13 @@ pipeline {
     stage('Backend: Install Dependencies') {
       steps {
         dir("${BACKEND_DIR}") {
+          // Create venv only if it doesn't exist, install dependencies
           bat '''
-          python -m venv venv
+          if not exist venv (
+            python -m venv venv
+          )
           call venv\\Scripts\\activate.bat
+          pip install --upgrade pip
           pip install -r requirements.txt
           '''
         }
@@ -53,7 +57,8 @@ pipeline {
           bat '''
           call venv\\Scripts\\activate.bat
           echo Backend is ready
-          REM Optionally run: python app.py
+          REM Uncomment the next line to start your app
+          REM python app.py
           '''
         }
       }
