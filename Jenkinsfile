@@ -5,7 +5,6 @@ pipeline {
     NODE_VERSION = '18.x'
     BACKEND_DIR = 'backend'
     FRONTEND_DIR = 'frontend'
-    PYTHON_VERSION = '3.10' // Just a note, not used directly here
   }
 
   tools {
@@ -41,14 +40,15 @@ pipeline {
     stage('Backend: Install Dependencies') {
       steps {
         dir("${BACKEND_DIR}") {
-          bat '''
-          if not exist venv\\Scripts\\activate.bat (
-            python -m venv venv
-          )
-          call venv\\Scripts\\activate.bat
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          '''
+          bat 'npm install'
+        }
+      }
+    }
+
+    stage('Backend: Build') {
+      steps {
+        dir("${BACKEND_DIR}") {
+          bat 'npx tsc'
         }
       }
     }
@@ -56,24 +56,20 @@ pipeline {
     stage('Backend: Run Tests') {
       steps {
         dir("${BACKEND_DIR}") {
-          bat '''
-          call venv\\Scripts\\activate.bat
-          python -m unittest discover
-          '''
+          // If you have Jest or Mocha configured for tests
+          bat 'npm test'
         }
       }
     }
 
-    stage('Backend: Run App') {
-      steps {
-        dir("${BACKEND_DIR}") {
-          bat '''
-          call venv\\Scripts\\activate.bat
-          REM python app.py
-          '''
-        }
-      }
-    }
+    // Optional: only if you want to keep the app running on Jenkins (usually not done)
+    // stage('Backend: Run App') {
+    //   steps {
+    //     dir("${BACKEND_DIR}") {
+    //       bat 'npm start'
+    //     }
+    //   }
+    // }
   }
 
   post {

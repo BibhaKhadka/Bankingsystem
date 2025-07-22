@@ -18,6 +18,7 @@ const loanRoutes_1 = __importDefault(require("./routes/loanRoutes"));
 const investmentRoutes_1 = __importDefault(require("./routes/investmentRoutes"));
 const budgetRoutes_1 = __importDefault(require("./routes/budgetRoutes"));
 const chatbotRoutes_1 = __importDefault(require("./routes/chatbotRoutes"));
+const dashboardRoutes_1 = __importDefault(require("./routes/dashboardRoutes"));
 // Load environment variables
 dotenv_1.default.config();
 // Initialize Express app
@@ -37,6 +38,11 @@ app.use('/api/loans', loanRoutes_1.default);
 app.use('/api/investments', investmentRoutes_1.default);
 app.use('/api/budgets', budgetRoutes_1.default);
 app.use('/api/support', chatbotRoutes_1.default);
+app.use('/api/dashboard', dashboardRoutes_1.default);
+// Health check route
+app.get('/', (req, res) => {
+    res.send('Backend is working!');
+});
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ai-banking';
 mongoose_1.default
@@ -58,7 +64,7 @@ app.use((err, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 5001;
 const server = app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port http://localhost:${PORT}`);
 }).on('error', (e) => {
     if (e.code === 'EADDRINUSE') {
         console.error(`Port ${PORT} is already in use. Try using a different port.`);

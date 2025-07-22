@@ -53,8 +53,12 @@ const loanApproval_1 = require("../ai/loanApproval");
 const applyForLoan = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
+        console.log('Loan application process started');
+        console.log('Request user:', req.user);
+        console.log('Request body:', req.body);
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
+            console.log('Validation errors:', errors.array());
             return res.status(400).json({ errors: errors.array() });
         }
         const { accountId, loanType, amount, term, purpose, creditScore } = req.body;
@@ -101,12 +105,20 @@ const applyForLoan = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             loan.status = Loan_1.LoanStatus.REJECTED;
             loan.approvalScore = approvalResult.score;
         }
-        yield loan.save();
-        res.status(201).json({
-            message: 'Loan application processed',
-            loan,
-            approvalResult
-        });
+        console.log('About to save loan to database:', loan);
+        try {
+            const savedLoan = yield loan.save();
+            console.log('Loan successfully saved to database:', savedLoan);
+            res.status(201).json({
+                message: 'Loan application processed',
+                loan: savedLoan,
+                approvalResult
+            });
+        }
+        catch (dbError) {
+            console.error('Error saving loan to database:', dbError);
+            throw dbError;
+        }
     }
     catch (error) {
         console.error('Loan application error:', error);
@@ -115,10 +127,13 @@ const applyForLoan = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.applyForLoan = applyForLoan;
 const getUserLoans = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b;
     try {
-        const loans = yield Loan_1.default.find({ userId: (_a = req.user) === null || _a === void 0 ? void 0 : _a.userId })
+        console.log('Getting loans for user ID:', (_a = req.user) === null || _a === void 0 ? void 0 : _a.userId);
+        const loans = yield Loan_1.default.find({ userId: (_b = req.user) === null || _b === void 0 ? void 0 : _b.userId })
             .sort({ createdAt: -1 });
+        console.log('Found loans:', loans);
+        console.log('Number of loans found:', loans.length);
         res.json(loans);
     }
     catch (error) {

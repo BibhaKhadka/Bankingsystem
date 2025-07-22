@@ -40,6 +40,11 @@ app.use('/api/budgets', budgetRoutes);
 app.use('/api/support', chatbotRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+// Health check route
+app.get('/', (req, res) => {
+  res.send('Backend is working!');
+});
+
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ai-banking';
 mongoose
