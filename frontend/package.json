@@ -28,6 +28,8 @@
     "build": "react-scripts build",
     "build:prod": "env-cmd -f .env.production react-scripts build",
     "build:dev": "env-cmd -f .env.development react-scripts build",
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
+    "serve:staging": "serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "type-check": "tsc --noEmit",
@@ -57,6 +59,7 @@
     "autoprefixer": "^10.4.14",
     "env-cmd": "^10.1.0",
     "postcss": "^8.4.21",
+    "serve": "^14.2.4",
     "tailwindcss": "^3.2.7"
   }
 }
