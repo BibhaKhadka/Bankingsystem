@@ -75,14 +75,16 @@ pipeline {
       steps {
         echo 'Deploying backend to staging...'
         dir("${BACKEND_DIR}") {
-          bat 'start "" cmd /c "npm run start:staging"' // Run backend in background
+          // Run backend normally, not detached; manage long-running processes outside Jenkins ideally
+          bat 'npm run start:staging'
         }
         echo 'Serving frontend staging build...'
         dir("${FRONTEND_DIR}") {
-          bat 'start "" cmd /c "npm run serve:staging"' // Run frontend in background
+          // Same for frontend serve
+          bat 'npm run serve:staging'
         }
-        // Optional wait
-        bat 'timeout /t 10'
+        // Optional wait - replaced timeout with ping to avoid error
+        bat 'ping 127.0.0.1 -n 11 > nul'
       }
     }
 
