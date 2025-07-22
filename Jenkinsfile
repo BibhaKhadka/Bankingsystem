@@ -5,12 +5,11 @@ pipeline {
     NODE_VERSION = '18.x'
     BACKEND_DIR = 'backend'
     FRONTEND_DIR = 'frontend'
-    PYTHON_VERSION = '3.10' // optional for readability
+    PYTHON_VERSION = '3.10'
   }
 
   tools {
-    nodejs "NodeJS_18" // Jenkins tool name
-    // Optional: python "Python_3.10" (if configured in Jenkins Tools)
+    nodejs "NodeJS_18"
   }
 
   stages {
@@ -23,7 +22,7 @@ pipeline {
     stage('Frontend: Install Dependencies') {
       steps {
         dir("${FRONTEND_DIR}") {
-          sh 'npm install'
+          bat 'npm install'
         }
       }
     }
@@ -31,8 +30,7 @@ pipeline {
     stage('Frontend: Build') {
       steps {
         dir("${FRONTEND_DIR}") {
-          sh 'npm run build'
-          // sh 'npm run export' // if you're exporting static site
+          bat 'npm run build'
         }
       }
     }
@@ -41,9 +39,9 @@ pipeline {
       steps {
         dir("${BACKEND_DIR}") {
           bat '''
-            python -m venv venv
-            call venv\\Scripts\\activate
-            pip install -r requirements.txt
+          python -m venv venv
+          call venv\\Scripts\\activate.bat
+          pip install -r requirements.txt
           '''
         }
       }
@@ -53,9 +51,9 @@ pipeline {
       steps {
         dir("${BACKEND_DIR}") {
           bat '''
-            call venv\\Scripts\\activate
-            echo Backend is ready
-            REM Optional: python app.py or uvicorn main:app
+          call venv\\Scripts\\activate.bat
+          echo Backend is ready
+          REM Optionally run: python app.py
           '''
         }
       }
