@@ -7,7 +7,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 // Layout component
 import Layout from "./components/layout/Layout";
 import PrivateRoute from "./components/routing/PrivateRoute";
-import AdminRoute from "./components/routing/AdminRoute";
+//import AdminRoute from "./components/routing/AdminRoute";
 
 // Pages
 import Dashboard from "./pages/Dashboard";
