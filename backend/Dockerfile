@@ -1,23 +1,21 @@
-# 1. Use an official Node.js base image
+# Use official Node.js LTS image
 FROM node:18
 
-# 2. Set working directory inside container
+# Set working directory inside container
 WORKDIR /usr/src/app
 
-# 3. Copy package files first to install dependencies (optimizes caching)
+# Copy package files and install dependencies first
 COPY package*.json ./
-
-# 4. Install dependencies (including devDependencies like TypeScript)
 RUN npm install
 
-# 5. Copy the rest of your backend source code into the container
+# Copy all source code
 COPY . .
 
-# 6. Compile TypeScript to JavaScript
+# Build TypeScript
 RUN npx tsc
 
-# 7. Expose the port your backend runs on
+# Expose the backend port (adjust if different)
 EXPOSE 3001
 
-# 8. Start the backend (entry point after TypeScript compilation)
-CMD ["node", "dist/index.js"]
+# Start the server using the correct entry file
+CMD ["node", "dist/server.js"]
