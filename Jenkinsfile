@@ -66,33 +66,23 @@ pipeline {
     stage('Approval: Deploy to Staging?') {
       steps {
         script {
-          input message: 'Proceed to staging deployment?', ok: 'Yes, Deploy to Staging'
+          input message: 'Proceed to staging deployment?', ok: 'Yes'
         }
       }
     }
 
     stage('Deploy to Staging VM') {
       steps {
-        sshagent(credentials: ['vm-deploy-key']) {
-          sh '''
-            ssh -o StrictHostKeyChecking=no bibha@192.168.1.73 << 'ENDSSH'
-              pkill -f "npm run start:staging" || true
-              pkill -f "serve -s build" || true
-
-              cd Bankingsystem
-              git pull origin master
-
-              cd backend
-              npm install
-              npm run start:staging &
-
-              cd ../frontend
-              npm install
-              npm run build
-              nohup serve -s build -l 3000 &
-            ENDSSH
-          '''
-        }
+        // Running ssh command directly in Windows batch
+        bat """
+          ssh -o StrictHostKeyChecking=no bibha@192.168.1.73 ^
+          "pkill -f \\"npm run start:staging\\" || true && ^
+           pkill -f \\"serve -s build\\" || true && ^
+           cd Bankingsystem && git pull origin master && ^
+           cd backend && npm install && npm run start:staging & ^
+           cd ../frontend && npm install && npm run build && ^
+           nohup serve -s build -l 3000 &"
+        """
       }
     }
 
@@ -106,26 +96,15 @@ pipeline {
 
     stage('Deploy to Production VM') {
       steps {
-        sshagent(credentials: ['vm-deploy-key']) {
-          sh '''
-            ssh -o StrictHostKeyChecking=no bibha@192.168.1.74 << 'ENDSSH'
-              pkill -f "npm run start:prod" || true
-              pkill -f "serve -s build" || true
-
-              cd Bankingsystem
-              git pull origin master
-
-              cd backend
-              npm install
-              npm run start:prod &
-
-              cd ../frontend
-              npm install
-              npm run build:prod
-              nohup serve -s build -l 80 &
-            ENDSSH
-          '''
-        }
+        bat """
+          ssh -o StrictHostKeyChecking=no bibha@192.168.1.74 ^
+          "pkill -f \\"npm run start:prod\\" || true && ^
+           pkill -f \\"serve -s build\\" || true && ^
+           cd Bankingsystem && git pull origin master && ^
+           cd backend && npm install && npm run start:prod & ^
+           cd ../frontend && npm install && npm run build:prod && ^
+           nohup serve -s build -l 80 &"
+        """
       }
     }
   }
