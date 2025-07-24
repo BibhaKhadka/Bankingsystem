@@ -73,7 +73,6 @@ pipeline {
 
     stage('Deploy to Staging VM') {
       steps {
-        // Running ssh command directly in Windows batch
         bat """
           ssh -o StrictHostKeyChecking=no bibha@192.168.1.73 ^
           "pkill -f \\"npm run start:staging\\" || true && ^
