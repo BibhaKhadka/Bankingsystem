@@ -31,8 +31,8 @@ pipeline {
       steps {
         dir("${FRONTEND_DIR}") {
           bat '''
-          set CI=false
-          npm run build
+            set CI=false
+            npm run build
           '''
         }
       }
@@ -74,19 +74,14 @@ pipeline {
     stage('Deploy to Staging VM') {
       steps {
         bat '''
-        ssh -o StrictHostKeyChecking=no bibha@192.168.1.73 "
-          pkill -f 'npm run start:staging' || true
-          pkill -f 'serve -s build' || true
-          cd Bankingsystem &&
-          git pull origin master &&
-          cd backend &&
-          npm install &&
-          nohup npm run start:staging > backend.log 2>&1 &
-          cd ../frontend &&
-          npm install &&
-          npm run build &&
-          nohup serve -s build -l 3000 > frontend.log 2>&1 &
-        "
+        ssh -o StrictHostKeyChecking=no bibha@192.168.1.73 ^
+        "pkill -f 'npm run start:staging' || true && ^
+         pkill -f 'serve -s build' || true && ^
+         cd Bankingsystem && git pull origin master && ^
+         cd backend && npm install && ^
+         nohup npm run start:staging > backend.log 2>&1 & ^
+         cd ../frontend && npm install && npm run build && ^
+         nohup serve -s build -l 3000 > frontend.log 2>&1 &"
         '''
       }
     }
@@ -102,19 +97,14 @@ pipeline {
     stage('Deploy to Production VM') {
       steps {
         bat '''
-        ssh -o StrictHostKeyChecking=no bibha@192.168.1.74 "
-          pkill -f 'npm run start:prod' || true
-          pkill -f 'serve -s build' || true
-          cd Bankingsystem &&
-          git pull origin master &&
-          cd backend &&
-          npm install &&
-          nohup npm run start:prod > backend.log 2>&1 &
-          cd ../frontend &&
-          npm install &&
-          npm run build:prod &&
-          nohup serve -s build -l 80 > frontend.log 2>&1 &
-        "
+        ssh -o StrictHostKeyChecking=no bibha@192.168.1.74 ^
+        "pkill -f 'npm run start:prod' || true && ^
+         pkill -f 'serve -s build' || true && ^
+         cd Bankingsystem && git pull origin master && ^
+         cd backend && npm install && ^
+         nohup npm run start:prod > backend.log 2>&1 & ^
+         cd ../frontend && npm install && npm run build:prod && ^
+         nohup serve -s build -l 80 > frontend.log 2>&1 &"
         '''
       }
     }
@@ -125,7 +115,7 @@ pipeline {
       echo 'Pipeline completed successfully!'
     }
     failure {
-      echo 'Pipeline failed. Check logs.'
+      echo 'Pipeline failed.'
     }
   }
 }
