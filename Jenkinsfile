@@ -74,13 +74,7 @@ pipeline {
     stage('Deploy to Staging VM') {
       steps {
         bat """
-          ssh -o StrictHostKeyChecking=no bibha@192.168.1.73 ^
-          "pkill -f \\"npm run start:staging\\" || true && ^
-           pkill -f \\"serve -s build\\" || true && ^
-           cd Bankingsystem && git pull origin master && ^
-           cd backend && npm install && npm run start:staging & ^
-           cd ../frontend && npm install && npm run build && ^
-           nohup serve -s build -l 3000 &"
+          ssh -o StrictHostKeyChecking=no bibha@192.168.1.73 "pkill -f \\"npm run start:staging\\" || true && pkill -f \\"serve -s build\\" || true && cd Bankingsystem && git pull origin master && cd backend && npm install && npm run start:staging & cd ../frontend && npm install && npm run build && nohup serve -s build -l 3000 &"
         """
       }
     }
@@ -96,13 +90,7 @@ pipeline {
     stage('Deploy to Production VM') {
       steps {
         bat """
-          ssh -o StrictHostKeyChecking=no bibha@192.168.1.74 ^
-          "pkill -f \\"npm run start:prod\\" || true && ^
-           pkill -f \\"serve -s build\\" || true && ^
-           cd Bankingsystem && git pull origin master && ^
-           cd backend && npm install && npm run start:prod & ^
-           cd ../frontend && npm install && npm run build:prod && ^
-           nohup serve -s build -l 80 &"
+          ssh -o StrictHostKeyChecking=no bibha@192.168.1.74 "pkill -f \\"npm run start:prod\\" || true && pkill -f \\"serve -s build\\" || true && cd Bankingsystem && git pull origin master && cd backend && npm install && npm run start:prod & cd ../frontend && npm install && npm run build:prod && nohup serve -s build -l 80 &"
         """
       }
     }
