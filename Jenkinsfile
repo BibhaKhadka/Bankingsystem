@@ -83,7 +83,7 @@ pipeline {
         // Replace IP and commands accordingly
         bat """
           \"C:\\Program Files\\Git\\bin\\bash.exe\" -c \\
-          \"ssh -o StrictHostKeyChecking=no bibha@192.168.1.74 \\
+          \"ssh -o StrictHostKeyChecking=no bibha@192.168.1.75 \\
           'pkill -f \\\\\\\"npm run start:prod\\\\\\\" || true && \\
            pkill -f \\\\\\\"serve -s build\\\\\\\" || true && \\
            cd Bankingsystem && git pull origin master && \\
